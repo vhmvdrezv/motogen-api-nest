@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model CarBrand {
+  id            String        @id @default(cuid())
+  title         String        @unique
+  active        Boolean       @default(true)
+
+  // References
+  carModel    CarModel[]
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([active])
+}
+
+model CarModel {
+  id            String        @id @default(cuid())
+  title         String
+  active        Boolean       @default(true)
+
+  // Foreign key to CarBrand
+  carBrandId    String
+  CarBrand      CarBrand      @relation(fields: [carBrandId], references: [id], onDelete: Cascade) 
+
+  // Relations
+  carTrim       CarTrim[]
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@unique([carBrandId, title])
+  @@index([carBrandId, active])
+}
+
+model CarTrim {
+  id            String        @id @default(cuid())
+  title         String        @default("Standard")
+  firstYearProd Int           
+  lastYearProd  Int
+  active        Boolean       @default(true)
+
+  // References
+  carModelId    String
+  carModel      CarModel      @relation(fields: [carModelId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@unique([carModelId, title])
+  @@index([carModelId, active])
+}
