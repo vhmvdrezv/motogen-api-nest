@@ -4,6 +4,8 @@ import { CarsService } from './cars.service';
 import { UpdateBrandDto } from './dto/brands/update-brand.dto';
 import { CreateModelDto } from './dto/models/create-model.dto';
 import { UpdateModelDto } from './dto/models/update-model.dto';
+import { CreateTrimDto } from './dto/trims/create-trim.dto';
+import { UpdateTrimDto } from './dto/trims/update-trim.dto';
 
 @Controller('cars')
 export class CarsController {
@@ -59,5 +61,25 @@ export class CarsController {
     @Delete('models/:id')
     async deleteModel(@Param('id') id: string) {
         return this.carsService.deleteModel(id);
+    }
+
+    @Post('trims')
+    async createTrim(@Body() createTrimDto: CreateTrimDto) {
+        return this.carsService.createTrim(createTrimDto);
+    }
+
+    @Get('trims')
+    async getAllTrims() {
+        return this.carsService.getAllTrims();
+    }
+
+    @Get('trims/:id')
+    async getTrimById(@Param('id') id: string) {
+        return this.carsService.getTrimById(id);
+    }
+
+    @Patch('trims/:id')
+    async updateTrim(@Param('id') id: string, @Body() updateTrimDto: UpdateTrimDto) {
+        return this.carsService.updateTrim(id, updateTrimDto);
     }
 }

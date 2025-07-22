@@ -1,9 +1,11 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Body, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import { CreateBrandDto } from './dto/brands/create-brand.dto';
 import { UpdateBrandDto } from './dto/brands/update-brand.dto';
 import { CreateModelDto } from './dto/models/create-model.dto';
 import { UpdateModelDto } from './dto/models/update-model.dto';
+import { CreateTrimDto } from './dto/trims/create-trim.dto';
+import { UpdateTrimDto } from './dto/trims/update-trim.dto';
 
 @Injectable()
 export class CarsService {
@@ -309,5 +311,224 @@ export class CarsService {
             success: true,
             message: 'مدل با موفقیت حذف شد.',
         }
+    }
+
+    async createTrim(@Body() createTrimDto: CreateTrimDto) {
+        const { title, firstYearProd, lastYearProd, active, carModelId } = createTrimDto;
+
+        if (firstYearProd > lastYearProd) {
+            throw new BadRequestException('اولین سال تولید نباید از آخرین سال تولید بیشتر باشد');
+        }
+
+
+        const modelExists = await this.databaseService.carModel.findUnique({
+            where: {
+                id: carModelId
+            }
+        });
+        if(!modelExists) throw new NotFoundException(`مدلی با شناسه ${carModelId} یافت نشد.`);
+
+        const trimExists = await this.databaseService.carTrim.findUnique({
+            where: {
+                carModelId_title: {
+                    carModelId,
+                    title
+                } 
+            }
+        });
+        if(trimExists) throw new ConflictException(`تیپ ماشین در مدل وارد شده وجود دارد. تیپ ماشین را عوض کنید.`);
+
+        const trim = await this.databaseService.carTrim.create({
+            data: {
+                title,
+                firstYearProd,
+                lastYearProd,
+                active,
+                carModelId,
+            }
+        });
+
+        return {
+            success: true,
+            message: 'تیپ با موفقیت ساخته شد.',
+            data: trim
+        };
+    }
+
+    async getAllTrims() {
+        const trims = await this.databaseService.carTrim.findMany({
+            where: {
+                active: true,
+            },
+            omit: {
+                active: true,
+                createdAt: true,
+                updatedAt: true,
+            }
+        });
+
+        return {
+            success: true,
+            message: 'لیست تیپ ها با موفقیت استخراج شد.',
+            data: trims
+        }
+    }
+
+    async getTrimById(id: string) {
+        const trim = await this.databaseService.carTrim.findUnique({
+            where: {
+                id,
+                active: true
+            },
+            omit: {
+                active: true,
+                createdAt: true,
+                updatedAt: true,
+            }
+        });
+        if (!trim) throw new NotFoundException(`تیپ با شناسه ${id} یافت نشد.`);
+
+        const model = await this.databaseService.carModel.findUnique({
+            where: {
+                id: trim.carModelId,
+            },
+            select: {
+                title: true,
+                CarBrand: {
+                    select: {
+                        title: true
+                    }
+                }
+            },
+        });
+
+        const data = {
+            ...trim,
+            modelTitle: model?.title,
+            brandTitle: model?.CarBrand.title,
+        }
+
+        return {
+            success: true,
+            message: 'تیپ خودرو با موفقیت استخراج شد.',
+            data,
+        };
+    }
+
+    async updateTrim(id: string, updateTrimDto: UpdateTrimDto) {
+        const { title, active, firstYearProd, lastYearProd, carModelId } = updateTrimDto;
+
+        if (firstYearProd && lastYearProd) {
+            if (firstYearProd > lastYearProd) {
+                throw new BadRequestException('اولین سال تولید نباید از آخرین سال تولید بیشتر باشد');
+            }
+        }
+
+        const trim = await this.databaseService.carTrim.findUnique({
+            where: {
+                id
+            }
+        });
+        if (!trim) throw new NotFoundException(`تیپ با شناسه ${id} یافت نشد.`);
+
+        if (firstYearProd && !lastYearProd) {
+            if (firstYearProd > trim.lastYearProd) {
+              throw new BadRequestException('اولین سال تولید نباید از آخرین سال تولید بیشتر باشد');  
+            }
+        }
+
+        if (!firstYearProd && lastYearProd) {
+            if (trim.firstYearProd > lastYearProd) {
+              throw new BadRequestException('اولین سال تولید نباید از آخرین سال تولید بیشتر باشد');  
+            }
+        }
+
+        if (carModelId) {
+            const carModelExists = await this.databaseService.carModel.findUnique({
+                where: {
+                    id: carModelId
+                }
+            });
+
+            if (!carModelExists) throw new NotFoundException(`مدل خودرو با شناسه ${carModelId} یافت نشد.`);
+        }
+
+        if (title && !carModelId) {
+            const trimWithTitleExists = await this.databaseService.carTrim.findUnique({
+                where: {
+                    carModelId_title: {
+                        carModelId: trim.carModelId,
+                        title
+                    }
+                }
+            })
+
+            if (trimWithTitleExists) {
+                throw new ConflictException('اسم تیپ در مدل وجود دارد. اسم دیگری انتخاب کنید');
+            }
+        }
+
+        if (!title && carModelId) {
+            const trimWithTitleExists = await this.databaseService.carTrim.findUnique({
+                where: {
+                    carModelId_title: {
+                        carModelId,
+                        title: trim.title,
+                    }
+                }
+            })
+
+            if (trimWithTitleExists) {
+                throw new ConflictException(' اسم تیپ در مدل وجود دارد. مدل دیگری انتخاب کنید یا اسم تیپ را تغییر دهید');
+            }
+        }
+
+        if (title && carModelId) {
+            const trimWithTitleExists = await this.databaseService.carTrim.findUnique({
+                where: {
+                    carModelId_title: {
+                        carModelId,
+                        title
+                    }
+                }
+            })
+
+            if (trimWithTitleExists) {
+                throw new ConflictException(' اسم تیپ در مدل وجود دارد. مدل دیگری انتخاب کنید یا اسم تیپ را تغییر دهید');
+            }
+        }
+
+        const updatedTrim = await this.databaseService.carTrim.update({
+            where: {
+                id
+            },
+            data: updateTrimDto
+        });
+
+        return {
+            success: true,
+            message: 'تیپ با موفقیت بروزرسانی شد.',
+            data: updatedTrim,
+        };
+    }
+
+    async deleteTrim(id: string) {
+        const trim = await this.databaseService.carTrim.findUnique({
+            where: {
+                id
+            }
+        });
+        if(!trim) throw new NotFoundException(`تیپ با شناسه ${id} یافت نشد.`);
+
+        await this.databaseService.carTrim.delete({
+            where: {
+                id
+            }
+        });
+
+        return {
+            success: true,
+            message: 'تیپ با موفقیت حذف شد.'
+        };
     }
 }
