@@ -190,6 +190,36 @@ export class CarsService {
         };
     }
 
+    async getBrandModels(carBrandId: string) {
+        const brand = await this.databaseService.carBrand.findUnique({
+            where: {
+                id: carBrandId,
+                active: true,
+            }
+        });
+        if (!brand) throw new NotFoundException(`برند با شناسه ${carBrandId} یافت نشد.`);
+
+        const where: any = { 
+            active: true,
+            carBrandId,
+        }
+
+        const models = await this.databaseService.carModel.findMany({
+            where,
+            omit: {
+                active: true,
+                createdAt: true,
+                updatedAt: true,
+            }
+        });
+
+        return {
+            success: true,
+            message: 'لیست مدل ها استخراج شد',
+            data: models
+        };
+    }
+
     async getModelById(id: string) {
         const model = await this.databaseService.carModel.findUnique({
             where: {
@@ -370,6 +400,36 @@ export class CarsService {
         return {
             success: true,
             message: 'لیست تیپ ها با موفقیت استخراج شد.',
+            data: trims
+        }
+    }
+
+    async getModelTrims(carModelId: string) {
+        const model = await this.databaseService.carModel.findUnique({
+            where: {
+                id: carModelId,
+                active: true,
+            }
+        })
+        if (!model) throw new NotFoundException(`مدل با شناسه ${carModelId} یافت نشد.`);
+
+        const where: any = { 
+            active: true,
+            carModelId,
+        }
+
+        const trims = await this.databaseService.carTrim.findMany({
+            where,
+            omit: {
+                active: true,
+                createdAt: true,
+                updatedAt: true,
+            }
+        });
+
+        return {
+            success: true,
+            message: 'لیست تیپ ها استخراج شد.',
             data: trims
         }
     }

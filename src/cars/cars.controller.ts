@@ -43,6 +43,11 @@ export class CarsController {
         return this.carsService.getAllModels();
     }
 
+    @Get('brands/:id/models')
+    async getBrandModels(@Param('id') carBrandId: string) {
+        return this.carsService.getBrandModels(carBrandId);
+    }
+
     @Get('models/:id')
     async getModelById(@Param('id') id: string) {
         return this.carsService.getModelById(id);
@@ -71,6 +76,11 @@ export class CarsController {
     @Get('trims')
     async getAllTrims() {
         return this.carsService.getAllTrims();
+    }
+
+    @Get('models/:id/trims')
+    async getModelTrims(@Param('id') carModelId: string) {
+        return this.carsService.getModelTrims(carModelId);
     }
 
     @Get('trims/:id')
