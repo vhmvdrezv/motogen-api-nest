@@ -14,24 +14,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id                  String        @id @default(cuid())
+  firstName           String?
+  lastName            String?
+  phoneNumber         String        @unique
+  isProfileCompleted  Boolean       @default(false)   
+  active              Boolean       @default(true)
+  refreshToken        String?        @unique
+  refreshTokenExpires DateTime?
+
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+}
+
 model CarBrand {
-  id            String        @id @default(cuid())
-  title         String        @unique
-  active        Boolean       @default(true)
+  id                  String        @id @default(cuid())
+  title               String        @unique
+  active              Boolean       @default(true)
 
   // References
   carModel    CarModel[]
 
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
 
   @@index([active])
 }
 
 model CarModel {
-  id            String        @id @default(cuid())
-  title         String
-  active        Boolean       @default(true)
+  id                  String        @id @default(cuid())
+  title               String
+  active              Boolean       @default(true)
 
   // Foreign key to CarBrand
   carBrandId    String
@@ -40,26 +54,26 @@ model CarModel {
   // Relations
   carTrim       CarTrim[]
 
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
 
   @@unique([carBrandId, title])
   @@index([carBrandId, active])
 }
 
 model CarTrim {
-  id            String        @id @default(cuid())
-  title         String        @default("Standard")
-  firstYearProd Int           
-  lastYearProd  Int
-  active        Boolean       @default(true)
+  id                  String        @id @default(cuid())
+  title               String        @default("Standard")
+  firstYearProd       Int           
+  lastYearProd        Int
+  active              Boolean       @default(true)
 
   // References
-  carModelId    String
-  carModel      CarModel      @relation(fields: [carModelId], references: [id], onDelete: Cascade)
+  carModelId          String
+  carModel            CarModel      @relation(fields: [carModelId], references: [id], onDelete: Cascade)
 
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
 
   @@unique([carModelId, title])
   @@index([carModelId, active])

@@ -4,11 +4,15 @@ import { AppService } from './app.service';
 import { CarsModule } from './cars/cars.module';
 import { DatabaseModule } from './database/database.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { AuthModule } from './auth/auth.module';
+import { CustomRedisModule } from './redis/redis.module';
+import { CacheManagerService } from './cache-manager/cache-manager.service';
+import { CacheManagerModule } from './cache-manager/cache-manager.module';
 
 @Module({
-  imports: [CarsModule, DatabaseModule],
+  imports: [CarsModule, DatabaseModule, AuthModule, CustomRedisModule, CacheManagerModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, CacheManagerService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
