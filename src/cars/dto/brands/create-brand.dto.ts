@@ -9,7 +9,12 @@ export class CreateBrandDto {
     @Matches(/^[a-zA-Z0-9\u0600-\u06FF\u200C\u200D\s\-_.,!?'"()]+$/, { 
         message: 'نام شامل کاراکتر های غیر مجاز است.' 
     })
-    @Transform(({ value }) => value?.trim())
+    @Transform(({ value }) => {
+        if (typeof value === 'string') {
+            return value.trim();
+        }
+        return value;
+    })
     title: string;
 
     @IsOptional()

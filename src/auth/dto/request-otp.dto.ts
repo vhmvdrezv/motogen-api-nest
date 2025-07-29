@@ -7,6 +7,5 @@ export class RequestOtpDto {
     @Matches(/^09[0-9]{9}$/, { 
         message: 'شماره موبایل معتبر نیست. فرمت صحیح: 09xxxxxxxxx' 
     })
-    @Transform(({ value }) => value?.trim())
     phoneNumber: string;
 }
