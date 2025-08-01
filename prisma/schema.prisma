@@ -24,6 +24,8 @@ model User {
   refreshToken        String?       @unique
   refreshTokenExpires DateTime?
 
+  cars                Car[]
+
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
 }
@@ -36,10 +38,13 @@ model Car {
   fuel                Fuel
   insuranceExpirationDate     DateTime
   nextTechnicalInspectionDate DateTime
-  nickname            String?
+  nickName            String?
 
   carTrimId           String        
   carTrim             CarTrim       @relation(fields: [carTrimId], references: [id])
+
+  userId              String
+  user                User          @relation(fields: [userId], references: [id])
 
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt  

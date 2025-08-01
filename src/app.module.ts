@@ -9,9 +9,10 @@ import { CustomRedisModule } from './redis/redis.module';
 import { CacheManagerService } from './cache-manager/cache-manager.service';
 import { CacheManagerModule } from './cache-manager/cache-manager.module';
 import { ColorsModule } from './colors/colors.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [CarsModule, DatabaseModule, AuthModule, CustomRedisModule, CacheManagerModule, ColorsModule],
+  imports: [CarsModule, DatabaseModule, AuthModule, CustomRedisModule, CacheManagerModule, ColorsModule, UsersModule],
   controllers: [AppController],
   providers: [AppService, CacheManagerService],
 })
