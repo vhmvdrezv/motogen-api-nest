@@ -21,11 +21,28 @@ model User {
   phoneNumber         String        @unique
   isProfileCompleted  Boolean       @default(false)   
   active              Boolean       @default(true)
-  refreshToken        String?        @unique
+  refreshToken        String?       @unique
   refreshTokenExpires DateTime?
 
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
+}
+
+model Car {
+  id                  String        @id @default(cuid())
+  productYear         Int
+  color               CarColor
+  kilometer           Int
+  fuel                Fuel
+  insuranceExpirationDate     DateTime
+  nextTechnicalInspectionDate DateTime
+  nickname            String?
+
+  carTrimId           String        
+  carTrim             CarTrim       @relation(fields: [carTrimId], references: [id])
+
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt  
 }
 
 model CarBrand {
@@ -48,8 +65,8 @@ model CarModel {
   active              Boolean       @default(true)
 
   // Foreign key to CarBrand
-  carBrandId    String
-  CarBrand      CarBrand      @relation(fields: [carBrandId], references: [id], onDelete: Cascade) 
+  carBrandId          String
+  CarBrand            CarBrand      @relation(fields: [carBrandId], references: [id], onDelete: Cascade) 
 
   // Relations
   carTrim       CarTrim[]
@@ -72,9 +89,33 @@ model CarTrim {
   carModelId          String
   carModel            CarModel      @relation(fields: [carModelId], references: [id], onDelete: Cascade)
 
+  cars                Car[]
+
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
 
   @@unique([carModelId, title])
   @@index([carModelId, active])
+}
+
+enum CarColor {
+  BLACK
+  WHITE
+  SILVER
+  GRAY
+  RED
+  BLUE
+  GREEN
+  YELLOW
+  ORANGE
+  BROWN
+  PURPLE
+  GOLD
+}
+
+enum Fuel {
+  GASOLINE
+  GAS
+  DIESEL
+  GASOLINE_GAS
 }
