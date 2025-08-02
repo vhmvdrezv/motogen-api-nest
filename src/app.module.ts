@@ -10,9 +10,10 @@ import { CacheManagerService } from './cache-manager/cache-manager.service';
 import { CacheManagerModule } from './cache-manager/cache-manager.module';
 import { ColorsModule } from './colors/colors.module';
 import { UsersModule } from './users/users.module';
+import { UserCarsModule } from './user-cars/user-cars.module';
 
 @Module({
-  imports: [CarsModule, DatabaseModule, AuthModule, CustomRedisModule, CacheManagerModule, ColorsModule, UsersModule],
+  imports: [CarsModule, DatabaseModule, AuthModule, CustomRedisModule, CacheManagerModule, ColorsModule, UsersModule, UserCarsModule],
   controllers: [AppController],
   providers: [AppService, CacheManagerService],
 })

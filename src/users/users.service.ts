@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException, Req } from '@nestjs/common';
 import { CompleteProfileDto } from './dto/complete-profile.dto';
 import { DatabaseService } from 'src/database/database.service';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 
 @Injectable()
 export class UsersService {
@@ -64,6 +65,36 @@ export class UsersService {
         return {
             success: true,
             message: 'اطلاعات با موفقیت ثبت شد'
+        }
+    }
+
+    async updateProfile(updateProfileDto: UpdateProfileDto, userId: string) {
+        const user = await this.databaseService.user.findUnique({
+            where: {
+                id: userId
+            }
+        });
+        if (!user) throw new NotFoundException('کاربر یافت نشد');
+        if (!user.isProfileCompleted) {
+            throw new BadRequestException('ابتدا پروفایل خود را تکمیل کنید');
+        }
+
+        const updatedUser = await this.databaseService.user.update({
+            where: {
+                id: userId
+            },
+            data: updateProfileDto,
+            select: {
+                firstName: true,
+                lastName: true,
+                phoneNumber: true,
+            }
+        });
+
+        return {
+            success: true,
+            message: 'پروفایل شما با موفقیت بروزرسانی شد.',
+            data: updatedUser,
         }
     }
 
