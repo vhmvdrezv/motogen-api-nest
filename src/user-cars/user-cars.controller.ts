@@ -13,4 +13,10 @@ export class UserCarsController {
     async getUserCar(@Param('id') carId: string, @Req() req: any) {
         return this.userCarsService.getUserCar(carId, req.user.userId);
     }
+
+    @UseGuards(JwtGuard)
+    @Get()
+    async getUserCars(@Req() req: any) {
+        return this.userCarsService.getUserCars(req.user.userId);
+    }
 }
