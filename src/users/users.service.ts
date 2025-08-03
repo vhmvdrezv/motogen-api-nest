@@ -53,7 +53,7 @@ export class UsersService {
                     productYear,
                     carTrimId: trimId,
                     color: carInformation.color,
-                    fuel: carInformation.feul,
+                    fuel: carInformation.fuel,
                     insuranceExpirationDate: carInformation.insuranceExpirationDate,
                     nextTechnicalInspectionDate: carInformation.nextTechnicalInspectionDate,
                     kilometer: carInformation.kilometer,

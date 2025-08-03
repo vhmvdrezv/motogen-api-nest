@@ -51,7 +51,7 @@ class Car {
 
     @IsNotEmpty()
     @IsEnum(Fuel)
-    feul: Fuel
+    fuel: Fuel
 
     @IsNotEmpty()
     @IsDate()
