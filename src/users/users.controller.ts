@@ -3,6 +3,7 @@ import { JwtGuard } from 'src/auth/guard/jwt.guard';
 import { CompleteProfileDto } from './dto/complete-profile.dto';
 import { UsersService } from './users.service';
 import { UpdateProfileDto } from './dto/update-profile.dto';
+import { User } from 'src/common/decorators/user.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -12,13 +13,13 @@ export class UsersController {
 
     @UseGuards(JwtGuard)
     @Post('me/complete-profile')
-    async completeProfile(@Body() completeProfileDto: CompleteProfileDto, @Req() req: any) {
-        return this.userService.completeProfile(completeProfileDto, req.user.userId);
+    async completeProfile(@Body() completeProfileDto: CompleteProfileDto, @User('userId') userId: string) {
+        return this.userService.completeProfile(completeProfileDto, userId);
     }
 
     @UseGuards(JwtGuard)
     @Patch('me')
-    async updateProfile(@Body() updateProfileDto: UpdateProfileDto, @Req() req: any) {
-        return this.userService.updateProfile(updateProfileDto, req.user.userId);
+    async updateProfile(@Body() updateProfileDto: UpdateProfileDto, @User('userId') userId: string) {
+        return this.userService.updateProfile(updateProfileDto, userId);
     }
 }
