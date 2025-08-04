@@ -159,4 +159,25 @@ export class UserCarsService {
             data: flattenedCar
         }
     }
+
+    async deleteCar(carId: string, userId: string) {
+        const car = await this.databaseService.car.findUnique({
+            where: {
+                id: carId,
+                userId,
+            }
+        })
+        if (!car) throw new NotFoundException('خودرو شما یافت نشد.');
+
+        await this.databaseService.car.delete({
+            where: {
+                id: carId
+            }
+        });
+
+        return {
+            success: true,
+            message: 'خودرو شما با موفقیت حذف شد.'
+        }
+    }
 }

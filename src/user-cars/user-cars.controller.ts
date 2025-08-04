@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { UserCarsService } from './user-cars.service';
 import { JwtGuard } from 'src/auth/guard/jwt.guard';
 import { User } from 'src/common/decorators/user.decorator';
@@ -26,5 +26,11 @@ export class UserCarsController {
     @Post()
     async createCar(@Body() createCarDto: CreateCarDto, @User('userId') userId: string) {
         return this.userCarsService.createCar(createCarDto, userId);
-    } 
+    }
+
+    @UseGuards(JwtGuard)
+    @Delete(':id')
+    async deleteCar(@Param('id') carId: string, @User('userId') userId: string) {
+        return this.userCarsService.deleteCar(carId, userId);   
+    }
 }

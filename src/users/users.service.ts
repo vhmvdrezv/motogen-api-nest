@@ -97,5 +97,24 @@ export class UsersService {
             data: updatedUser,
         }
     }
+    
+    async getMyProfile(userId: string) {
+        const user = await this.databaseService.user.findUnique({
+            where: {
+                id: userId
+            },
+            select: {
+                firstName: true,
+                lastName: true,
+                id: true
+            }
+        });
+        if (!user) throw new NotFoundException('کاربر یافت نشد');
 
+        return {
+            success: true,
+            message: 'پروفایل شما استخراج شد.',
+            data: user,
+        }
+    }
 }
