@@ -36,7 +36,8 @@ model Car {
   color               CarColor
   kilometer           Int
   fuel                Fuel
-  insuranceExpirationDate     DateTime
+  thirdPartyInsuranceExpiry   DateTime
+  bodyInsuranceExpiry         DateTime?
   nextTechnicalInspectionDate DateTime
   nickName            String?
 

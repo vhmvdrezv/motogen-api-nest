@@ -97,10 +97,10 @@ export class UserCarsService {
             throw new BadRequestException(' شما حداکثر دو خودرو میتوانید داشته باشید.')
         }
 
-        const { productYear, trimId, color, fuel, insuranceExpirationDate, kilometer, nextTechnicalInspectionDate, nickName } = createCarDto;
+        const { productYear, carTrimId } = createCarDto;
         const trim = await this.databaseService.carTrim.findUnique({
             where: {
-                id: trimId
+                id: carTrimId
             }
         });
         if (!trim) throw new NotFoundException("تریم خودرو یافت نشد.");
@@ -111,15 +111,8 @@ export class UserCarsService {
 
         const car = await this.databaseService.car.create({
             data: {
-                color,
-                fuel,
-                carTrimId: trimId,
-                productYear,
-                insuranceExpirationDate,
-                kilometer,
-                nextTechnicalInspectionDate,
                 userId,
-                nickName,
+                ...createCarDto,
             },
             select: {
                 carTrim: {

@@ -57,7 +57,13 @@ class Car {
     @IsDate()
     @MaxDate(new Date('2030-01-01'), { message: 'Date must not be after 2025-01-01' })
     @Type(() => Date)
-    insuranceExpirationDate: Date;
+    thirdPartyInsuranceExpiry: Date;
+
+    @IsNotEmpty()
+    @IsDate()
+    @MaxDate(new Date('2030-01-01'), { message: 'Date must not be after 2025-01-01' })
+    @Type(() => Date)
+    bodyInsuranceExpiry: Date;
 
     @IsNotEmpty()
     @IsDate()
@@ -67,7 +73,7 @@ class Car {
 
     @IsNotEmpty()
     @IsString()
-    trimId: string;
+    carTrimId: string;
 
     @IsOptional()
     @IsNotEmpty()

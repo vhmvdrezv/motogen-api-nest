@@ -11,7 +11,7 @@ export class UsersService {
 
     async completeProfile(completeProfileDto: CompleteProfileDto, userId: string) {
         const { userInformation, carInformation } = completeProfileDto
-        const { productYear, trimId } = carInformation;
+        const { productYear, carTrimId } = carInformation;
 
         const user = await this.databaseService.user.findUnique({
             where: {
@@ -25,7 +25,7 @@ export class UsersService {
 
         const trim = await this.databaseService.carTrim.findUnique({
             where: {
-                id: trimId
+                id: carTrimId
             }
         });
         if (!trim || !trim.active) {
@@ -50,14 +50,7 @@ export class UsersService {
             await db.car.create({
                 data: {
                     userId,
-                    productYear,
-                    carTrimId: trimId,
-                    color: carInformation.color,
-                    fuel: carInformation.fuel,
-                    insuranceExpirationDate: carInformation.insuranceExpirationDate,
-                    nextTechnicalInspectionDate: carInformation.nextTechnicalInspectionDate,
-                    kilometer: carInformation.kilometer,
-                    nickName: carInformation.nickName,
+                    ...carInformation
                 }
             });
         });
