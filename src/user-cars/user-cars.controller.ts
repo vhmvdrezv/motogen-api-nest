@@ -3,7 +3,10 @@ import { UserCarsService } from './user-cars.service';
 import { JwtGuard } from 'src/auth/guard/jwt.guard';
 import { User } from 'src/common/decorators/user.decorator';
 import { CreateCarDto } from './dto/create-car.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Cars')
+@ApiBearerAuth('JWT-auth')
 @Controller('users/me/cars')
 export class UserCarsController {
     constructor(
