@@ -40,6 +40,6 @@ async function bootstrap() {
     customSiteTitle: 'Car Management API Documentation',
   });
 
-  await app.listen(process.env.PORT ?? 8765);
+  await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

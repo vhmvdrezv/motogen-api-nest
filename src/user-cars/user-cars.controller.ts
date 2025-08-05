@@ -3,7 +3,7 @@ import { UserCarsService } from './user-cars.service';
 import { JwtGuard } from 'src/auth/guard/jwt.guard';
 import { User } from 'src/common/decorators/user.decorator';
 import { CreateCarDto } from './dto/create-car.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Cars')
 @ApiBearerAuth('JWT-auth')
@@ -13,6 +13,11 @@ export class UserCarsController {
         private readonly userCarsService: UserCarsService
     ) { }
 
+    @ApiParam({
+        name: 'id',
+        description: 'Car ID',
+        example: 'uuid-string'
+    })
     @UseGuards(JwtGuard)
     @Get(':id')
     async getUserCar(@Param('id') carId: string, @User('userId') userId: string) {
@@ -33,6 +38,11 @@ export class UserCarsController {
 
     @UseGuards(JwtGuard)
     @Delete(':id')
+    @ApiParam({
+        name: 'id',
+        description: 'Car ID to delete',
+        example: 'uuid-string'
+    })
     async deleteCar(@Param('id') carId: string, @User('userId') userId: string) {
         return this.userCarsService.deleteCar(carId, userId);   
     }
