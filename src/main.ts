@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,6 +13,9 @@ async function bootstrap() {
     forbidNonWhitelisted: true,
     transform: true
   }))
+  
+  // response interceptor
+  app.useGlobalInterceptors(new ResponseInterceptor()); // Now all responses are wrapped!
  
   // Swagger Configuration
   const config = new DocumentBuilder()

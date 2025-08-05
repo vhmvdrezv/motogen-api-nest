@@ -25,7 +25,6 @@ export class ColorsService {
         const data = colors.map((color) => ({ persianTitle: this.persianTranslations[color], englishTitle: color }));
 
         return {
-            success: true,
             message: "لیست رنگ ها استخراج شد",
             data,
         }

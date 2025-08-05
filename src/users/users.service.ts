@@ -56,7 +56,6 @@ export class UsersService {
         });
 
         return {
-            success: true,
             message: 'اطلاعات با موفقیت ثبت شد'
         }
     }
@@ -85,7 +84,6 @@ export class UsersService {
         });
 
         return {
-            success: true,
             message: 'پروفایل شما با موفقیت بروزرسانی شد.',
             data: updatedUser,
         }
@@ -105,7 +103,6 @@ export class UsersService {
         if (!user) throw new NotFoundException('کاربر یافت نشد');
 
         return {
-            success: true,
             message: 'پروفایل شما استخراج شد.',
             data: user,
         }

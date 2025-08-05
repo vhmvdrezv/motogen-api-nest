@@ -32,7 +32,6 @@ export class CarsService {
         });
 
         return {
-            success: true,
             message: 'برند با موفقیت ساخته شد.',
             data: newBrand
         };
@@ -50,7 +49,6 @@ export class CarsService {
         });
 
         return {
-            success: true,
             message: 'لیست برند ها استخراج شد.',
             data: brands
         };
@@ -85,7 +83,6 @@ export class CarsService {
         });
 
         return {
-            success: true,
             message: "برند خودرو با موفقیت بروزرسانی شد.",
             data: updatedBrand,
         };
@@ -109,7 +106,6 @@ export class CarsService {
         const { active, ...rest} = brand;
 
         return {
-            success: true,
             message: 'برند خودرو با موفقیت استخراج شد.',
             data: rest,
         };
@@ -129,7 +125,6 @@ export class CarsService {
         });
 
         return {
-            success: true,
             message: 'برند خودرو با موفقیت حذف شد.'
         };
     }
@@ -165,7 +160,6 @@ export class CarsService {
         });
 
         return {
-            success: true,
             message: 'مدل خودرو با موفقیت ثبت شد.',
             data: model,
         };
@@ -184,7 +178,6 @@ export class CarsService {
         });
 
         return {
-            success: true,
             message: 'مدل های خودرو استخراج شدند.',
             data: models
         };
@@ -214,7 +207,6 @@ export class CarsService {
         });
 
         return {
-            success: true,
             message: 'لیست مدل ها استخراج شد',
             data: models
         };
@@ -237,7 +229,6 @@ export class CarsService {
         const { active, ...rest } = model;
 
         return {
-            success: true,
             message: 'مدل خودرو با موفقیت استخراج شد.',
             data: rest
         };
@@ -316,7 +307,6 @@ export class CarsService {
         });
 
         return {
-            success: true,
             message: 'مدل با موفقیت بروزرسانی شد.',
             data: updatedModel,
         };
@@ -338,7 +328,6 @@ export class CarsService {
         });
 
         return {
-            success: true,
             message: 'مدل با موفقیت حذف شد.',
         }
     }
@@ -379,7 +368,6 @@ export class CarsService {
         });
 
         return {
-            success: true,
             message: 'تیپ با موفقیت ساخته شد.',
             data: trim
         };
@@ -398,7 +386,6 @@ export class CarsService {
         });
 
         return {
-            success: true,
             message: 'لیست تیپ ها با موفقیت استخراج شد.',
             data: trims
         }
@@ -428,7 +415,6 @@ export class CarsService {
         });
 
         return {
-            success: true,
             message: 'لیست تیپ ها استخراج شد.',
             data: trims
         }
@@ -469,7 +455,6 @@ export class CarsService {
         }
 
         return {
-            success: true,
             message: 'تیپ خودرو با موفقیت استخراج شد.',
             data,
         };
@@ -566,7 +551,6 @@ export class CarsService {
         });
 
         return {
-            success: true,
             message: 'تیپ با موفقیت بروزرسانی شد.',
             data: updatedTrim,
         };
@@ -587,7 +571,6 @@ export class CarsService {
         });
 
         return {
-            success: true,
             message: 'تیپ با موفقیت حذف شد.'
         };
     }

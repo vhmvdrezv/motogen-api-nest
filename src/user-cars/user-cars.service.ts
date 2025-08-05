@@ -36,7 +36,6 @@ export class UserCarsService {
         }
 
         return {
-            success: true,
             message: 'خودرو شما با موفقیت استخراج شد.',
             data,
         }
@@ -78,7 +77,6 @@ export class UserCarsService {
         }));
 
         return {
-            success: true,
             message: 'لیست خودرو های شما استخراج شد.',
             data: flattenedCars
         }
@@ -148,7 +146,6 @@ export class UserCarsService {
         };
         
         return {
-            success: true,
             message: 'خودروی شما اضافه شد.',
             data: flattenedCar
         }
@@ -170,7 +167,6 @@ export class UserCarsService {
         });
 
         return {
-            success: true,
             message: 'خودرو شما با موفقیت حذف شد.'
         }
     }
@@ -261,7 +257,6 @@ export class UserCarsService {
         };
 
         return {
-            success: true,
             message: 'خودرو با موفقیت ویرایش شد.',
             data: flattenedCar
         }

@@ -29,7 +29,6 @@ export class AuthService {
         await this.cacheManagerService.setEx(phoneNumber, hashedOtp, 120)
 
         return {
-            success: true,
             message: 'کد به شماره شما ارسال شد.',
             data: otpCode
         }
@@ -75,7 +74,6 @@ export class AuthService {
         });
 
         return {
-            success: true,
             message: user ? 'ثبت نام و ورود موفقیت آمیز بود.' : 'ورود موفقیت آمیز بود.',
             data: {
                 refreshToken,
