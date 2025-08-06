@@ -13,7 +13,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, ResponseDto<T>
                 
                 const data = typeof responseData === 'object' && responseData?.data
                                         ? responseData.data
-                                        : responseData
+                                        : undefined
                 
                 return {
                     success: true,
