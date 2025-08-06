@@ -36,7 +36,7 @@ export class UsersService {
             throw new BadRequestException("سال تولید خودرو شما اشتباه است.");
         }
 
-        await this.databaseService.$transaction(async (db) => {
+        const car = await this.databaseService.$transaction(async (db) => {
             await db.user.update({
                 where: {
                     id: userId
@@ -47,16 +47,20 @@ export class UsersService {
                     isProfileCompleted: true
                 }
             });
-            await db.car.create({
+            const car = await db.car.create({
                 data: {
                     userId,
                     ...carInformation
                 }
             });
+            return car;
         });
 
         return {
-            message: 'اطلاعات با موفقیت ثبت شد'
+            message: 'اطلاعات با موفقیت ثبت شد',
+            data: {
+                carId: car.id,
+            }
         }
     }
 
