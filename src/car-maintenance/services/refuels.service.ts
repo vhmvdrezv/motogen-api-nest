@@ -4,7 +4,7 @@ import { DatabaseService } from "src/database/database.service";
 import { UpdateRefuelDto } from "../dto/refuel/update-refuel.dto";
 
 @Injectable()
-export class RefuelService {
+export class RefuelsService {
     constructor(
         private readonly databaseService: DatabaseService
     ) { }

@@ -1,17 +1,21 @@
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from 'src/database/database.module';
-import { RefuelController } from './controllers/refuel.controller';
-import { RefuelService } from './services/refuel.service';
+import { RefuelsService } from './services/refuels.service';
+import { OilChangesService } from './services/oil-changes.service';
+import { RefuelsController } from './controllers/refuels.controller';
+import { OilChangesController } from './controllers/oil-changes.controller';
 
 @Module({
     imports: [
         DatabaseModule,
     ],
     controllers: [
-        RefuelController,
+        OilChangesController,
+        RefuelsController,
     ],
     providers: [
-        RefuelService,
+        RefuelsService,
+        OilChangesService,
     ]
 })
-export class CarMaintenanceModule {}
+export class CarMaintenanceModule { }

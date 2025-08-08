@@ -48,6 +48,7 @@ model Car {
   user                User          @relation(fields: [userId], references: [id])
 
   refuelLogs          RefuelLog[]
+  oilChangeLogs      OilChangeLog[]
 
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt  
@@ -68,9 +69,26 @@ model RefuelLog {
   updatedAt           DateTime      @updatedAt  
 }
 
-enum RefuelPaymentMethod {
-  SUBSIDIZED
-  MARKET
+model OilChangeLog {
+  id                  String        @id @default(cuid())
+  date                DateTime
+  oilType             OilType
+  oilBrandAndModel    String
+  kilometer           Int
+  cost                Int
+  location            String
+  notes               String?
+  
+  oilFilterChanged    Boolean?
+  airFilterChanged    Boolean?
+  cabinFilterChanged  Boolean?
+  fuelFilterChanged   Boolean?
+
+  carId               String
+  car                 Car           @relation(fields: [carId], references: [id], onDelete: Cascade)
+
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt  
 }
 
 model CarBrand {
@@ -146,4 +164,16 @@ enum Fuel {
   GAS
   DIESEL
   GASOLINE_GAS
+}
+
+enum RefuelPaymentMethod {
+  SUBSIDIZED
+  MARKET
+}
+
+enum OilType {
+  ENGINE
+  GEARBOX
+  BRAKE
+  STEERING
 }
