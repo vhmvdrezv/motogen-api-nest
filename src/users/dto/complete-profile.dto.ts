@@ -98,7 +98,7 @@ class Car {
     })
     @IsNotEmpty()
     @IsDate()
-    @MaxDate(new Date('2030-01-01'), { message: 'Date must not be after 2025-01-01' })
+    @MaxDate(() => { const d = new Date(); d.setFullYear(d.getFullYear() + 1); d.setDate(d.getDate() + 1); d.setHours(0, 0, 0, 0); return d; }, { message: 'تاریخ نباید بیشتر از یک سال آینده باشد' })
     @Type(() => Date)
     thirdPartyInsuranceExpiry: Date;
 
@@ -111,7 +111,7 @@ class Car {
     @IsOptional()
     @IsNotEmpty()
     @IsDate()
-    @MaxDate(new Date('2030-01-01'), { message: 'Date must not be after 2025-01-01' })
+    @MaxDate(() => { const d = new Date(); d.setFullYear(d.getFullYear() + 1); d.setDate(d.getDate() + 1); d.setHours(0, 0, 0, 0); return d; }, { message: 'تاریخ نباید بیشتر از یک سال آینده باشد' })
     @Type(() => Date)
     bodyInsuranceExpiry?: Date;
 
@@ -123,7 +123,7 @@ class Car {
     })
     @IsNotEmpty()
     @IsDate()
-    @MaxDate(new Date('2030-01-01'), { message: 'Date must not be after 2030-01-01' })
+    @MaxDate(() => { const d = new Date(); d.setFullYear(d.getFullYear() + 1); d.setDate(d.getDate() + 1); d.setHours(0, 0, 0, 0); return d; }, { message: 'تاریخ نباید بیشتر از یک سال آینده باشد' })
     @Type(() => Date)
     nextTechnicalInspectionDate: Date;
 

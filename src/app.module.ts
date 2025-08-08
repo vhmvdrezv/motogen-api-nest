@@ -1,6 +1,4 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { CarsModule } from './cars/cars.module';
 import { DatabaseModule } from './database/database.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
@@ -11,11 +9,12 @@ import { CacheManagerModule } from './cache-manager/cache-manager.module';
 import { ColorsModule } from './colors/colors.module';
 import { UsersModule } from './users/users.module';
 import { UserCarsModule } from './user-cars/user-cars.module';
+import { CarMaintenanceModule } from './car-maintenance/car-maintenance.module';
 
 @Module({
-  imports: [CarsModule, DatabaseModule, AuthModule, CustomRedisModule, CacheManagerModule, ColorsModule, UsersModule, UserCarsModule],
-  controllers: [AppController],
-  providers: [AppService, CacheManagerService],
+  imports: [CarsModule, DatabaseModule, AuthModule, CustomRedisModule, CacheManagerModule, ColorsModule, UsersModule, UserCarsModule, CarMaintenanceModule],
+  controllers: [],
+  providers: [CacheManagerService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
