@@ -101,7 +101,8 @@ export class UsersService {
             select: {
                 firstName: true,
                 lastName: true,
-                id: true
+                id: true,
+                phoneNumber: true
             }
         });
         if (!user) throw new NotFoundException('کاربر یافت نشد');
