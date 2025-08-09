@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from "@nestjs/common";
 import { RefuelsService } from "../services/refuels.service";
 import { CreateRefuelDto } from "../dto/refuel/create-refuel.dto";
 import { User } from "src/common/decorators/user.decorator";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { JwtGuard } from "src/auth/guard/jwt.guard";
 import { UpdateRefuelDto } from "../dto/refuel/update-refuel.dto";
+import { GetAllRefuelsDto } from "../dto/refuel/get-all-refuels.dto";
 
 @ApiTags('Refuels')
 @ApiBearerAuth('JWT-auth')
@@ -26,10 +27,11 @@ export class RefuelsController {
 
     @Get()
     async getAllRefuels(
+        @Query() getAllRefuelsDto: GetAllRefuelsDto,
         @Param('carId') carId: string,
         @User('userId') userId: string
     ) {
-        return this.refuelsService.getAllRefuel(carId, userId);
+        return this.refuelsService.getAllRefuel(getAllRefuelsDto, carId, userId);
     }
 
     @Get(':refuelId')

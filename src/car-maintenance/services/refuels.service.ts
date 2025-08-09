@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { CreateRefuelDto } from "../dto/refuel/create-refuel.dto";
 import { DatabaseService } from "src/database/database.service";
 import { UpdateRefuelDto } from "../dto/refuel/update-refuel.dto";
+import { GetAllRefuelsDto } from "../dto/refuel/get-all-refuels.dto";
 
 @Injectable()
 export class RefuelsService {
@@ -35,7 +36,20 @@ export class RefuelsService {
         }
     }
 
-    async getAllRefuel(carId: string, userId: string) {
+    async getAllRefuel(
+        getAllRefuelsDto: GetAllRefuelsDto,
+        carId: string,
+        userId: string
+    ) {
+        const { order } = getAllRefuelsDto;
+        
+        const car = await this.databaseService.car.findUnique({ where: { id: carId } });
+        if (!car) throw new NotFoundException('خودرو یافت نشد');
+        const user = await this.databaseService.user.findUnique({ where: { id: userId } });
+        if (!user) throw new NotFoundException('کاربر یافت نشد.');
+
+        const orderBy = order ? { createdAt: order} : undefined;
+
         const refuels = await this.databaseService.refuelLog.findMany({
             where: {
                 carId,
@@ -46,7 +60,8 @@ export class RefuelsService {
             omit: {
                 createdAt: true,
                 updatedAt: true,
-            }
+            },
+            orderBy
         });
 
         return {
@@ -60,6 +75,11 @@ export class RefuelsService {
         refuelId: string,
         userId: string
     ) {
+        const car = await this.databaseService.car.findUnique({ where: { id: carId } });
+        if (!car) throw new NotFoundException('خودرو یافت نشد');
+        const user = await this.databaseService.user.findUnique({ where: { id: userId } });
+        if (!user) throw new NotFoundException('کاربر یافت نشد.');
+
         const refuel = await this.databaseService.refuelLog.findUnique({
             where: {
                 id: refuelId,
