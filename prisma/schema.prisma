@@ -48,7 +48,8 @@ model Car {
   user                User          @relation(fields: [userId], references: [id])
 
   refuelLogs          RefuelLog[]
-  oilChangeLogs      OilChangeLog[]
+  oilChangeLogs       OilChangeLog[]
+  repairLogs          RepairLog[]
 
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt  
@@ -83,6 +84,23 @@ model OilChangeLog {
   airFilterChanged    Boolean?
   cabinFilterChanged  Boolean?
   fuelFilterChanged   Boolean?
+
+  carId               String
+  car                 Car           @relation(fields: [carId], references: [id], onDelete: Cascade)
+
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt  
+}
+
+model RepairLog{
+  id                  String        @id @default(cuid())
+  date                DateTime
+  part                String
+  repairAction        RepairAction
+  kilometer           Int
+  location            String
+  cost                Int
+  notes               String?
 
   carId               String
   car                 Car           @relation(fields: [carId], references: [id], onDelete: Cascade)
@@ -176,4 +194,9 @@ enum OilType {
   GEARBOX
   BRAKE
   STEERING
+}
+
+enum RepairAction {
+  REPAIR
+  REPLACE
 }

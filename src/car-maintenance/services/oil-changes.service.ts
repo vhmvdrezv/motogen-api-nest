@@ -4,6 +4,7 @@ import { DatabaseService } from "src/database/database.service";
 import { OilType } from "generated/prisma";
 import { GetAllOilChangesDto } from "../dto/oil-change/get-all-oil-changes.dto";
 import { UpdateOilChangeDto } from "../dto/oil-change/update-oil-change.dto";
+import { SortOrder } from "src/common/enums/sort-order.enum";
 
 @Injectable()
 export class OilChangesService {
@@ -73,22 +74,22 @@ export class OilChangesService {
         carId: string,
         userId: string,
     ) {
-        const { oilType, order } = getAllOilChangesDto;
+        const { oilType, order = SortOrder.DESC } = getAllOilChangesDto;
 
-        const car = await this.databaseService.car.findUnique({ where: { id: carId } });
-        if (!car) throw new NotFoundException('خودرو یافت نشد');
-        const user = await this.databaseService.user.findUnique({ where: { id: userId } });
-        if (!user) throw new NotFoundException('کاربر یافت نشد.');
+        const car = await this.databaseService.car.findUnique({
+            where: {
+                id: carId,
+                userId
+            }
+        });
+        if (!car) throw new NotFoundException('خودرو شما یافت نشد');
 
         const where = {
             carId,
-            car: {
-                userId
-            },
             oilType: oilType ? oilType : undefined,
         };
 
-        const orderBy = order ? { createdAt: order } : undefined;
+        const orderBy = { date: order };
         const oilChanges = await this.databaseService.oilChangeLog.findMany({
             where,
             omit: {
@@ -113,18 +114,18 @@ export class OilChangesService {
         carId: string,
         userId: string
     ) {
-        const car = await this.databaseService.car.findUnique({ where: { id: carId } });
-        if (!car) throw new NotFoundException('خودرو یافت نشد');
-        const user = await this.databaseService.user.findUnique({ where: { id: userId } });
-        if (!user) throw new NotFoundException('کاربر یافت نشد.');
+        const car = await this.databaseService.car.findUnique({
+            where: {
+                id: carId,
+                userId
+            }
+        });
+        if (!car) throw new NotFoundException('خودرو شما یافت نشد');
 
         const oilChange = await this.databaseService.oilChangeLog.findUnique({
             where: {
                 id: oilChangeId,
                 carId,
-                car: {
-                    userId
-                }
             },
             omit: {
                 createdAt: true,
@@ -153,7 +154,7 @@ export class OilChangesService {
         });
         if (!car) throw new NotFoundException('خودرو یافت نشد.');
 
-        const oilChange = await this.databaseService.oilChangeLog.findUnique({ where: { id: oilChangeId }});
+        const oilChange = await this.databaseService.oilChangeLog.findUnique({ where: { id: oilChangeId, carId }});
         if (!oilChange) throw new NotFoundException('تعویض روغن یافت نشد.')
 
         const {
@@ -208,18 +209,18 @@ export class OilChangesService {
         carId: string,
         userId: string
     ) {
-        const car = await this.databaseService.car.findUnique({ where: { id: carId } });
-        if (!car) throw new NotFoundException('خودرو یافت نشد');
-        const user = await this.databaseService.user.findUnique({ where: { id: userId } });
-        if (!user) throw new NotFoundException('کاربر یافت نشد.');
+        const car = await this.databaseService.car.findUnique({
+            where: {
+                id: carId,
+                userId
+            }
+        });
+        if (!car) throw new NotFoundException('خودرو شما یافت نشد');
 
         const oilChange = await this.databaseService.oilChangeLog.findUnique({
             where: {
                 id: oilChangeId,
                 carId: carId,
-                car: {
-                    userId
-                }
             }
         });
         if (!oilChange) throw new NotFoundException('تعویض روغن یافت نشد');

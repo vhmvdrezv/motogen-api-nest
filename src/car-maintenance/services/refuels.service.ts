@@ -3,6 +3,7 @@ import { CreateRefuelDto } from "../dto/refuel/create-refuel.dto";
 import { DatabaseService } from "src/database/database.service";
 import { UpdateRefuelDto } from "../dto/refuel/update-refuel.dto";
 import { GetAllRefuelsDto } from "../dto/refuel/get-all-refuels.dto";
+import { SortOrder } from "src/common/enums/sort-order.enum";
 
 @Injectable()
 export class RefuelsService {
@@ -41,14 +42,17 @@ export class RefuelsService {
         carId: string,
         userId: string
     ) {
-        const { order } = getAllRefuelsDto;
+        const { order = SortOrder.DESC } = getAllRefuelsDto;
         
-        const car = await this.databaseService.car.findUnique({ where: { id: carId } });
-        if (!car) throw new NotFoundException('خودرو یافت نشد');
-        const user = await this.databaseService.user.findUnique({ where: { id: userId } });
-        if (!user) throw new NotFoundException('کاربر یافت نشد.');
+        const car = await this.databaseService.car.findUnique({
+            where: {
+                id: carId,
+                userId
+            }
+        });
+        if (!car) throw new NotFoundException('خودرو شما یافت نشد');
 
-        const orderBy = order ? { createdAt: order} : undefined;
+        const orderBy = { date: order};
 
         const refuels = await this.databaseService.refuelLog.findMany({
             where: {
