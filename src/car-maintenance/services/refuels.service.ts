@@ -11,7 +11,9 @@ export class RefuelsService {
         private readonly databaseService: DatabaseService
     ) { }
 
-    async createRefuel(createRefuelDto: CreateRefuelDto, carId: string, userId: string) {
+    async createRefuel(
+        createRefuelDto: CreateRefuelDto, carId: string, userId: string
+    ) {
         const car = await this.databaseService.car.findUnique({
             where: {
                 id: carId,
@@ -139,7 +141,9 @@ export class RefuelsService {
         }
     }
 
-    async deleteRefuel(carId: string, refuelId: string, userId: string) {
+    async deleteRefuel(
+        carId: string, refuelId: string, userId: string
+    ) {
         const refuel = await this.databaseService.refuelLog.findUnique({
             where: {
                 id: refuelId,

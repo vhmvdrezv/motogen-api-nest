@@ -147,15 +147,14 @@ export class OilChangesService {
         userId: string,
     ) {
         const car = await this.databaseService.car.findUnique({
-            where: {
-                id: carId,
-                userId
-            }
+            where: { id: carId, userId }
         });
         if (!car) throw new NotFoundException('خودرو یافت نشد.');
 
-        const oilChange = await this.databaseService.oilChangeLog.findUnique({ where: { id: oilChangeId, carId }});
-        if (!oilChange) throw new NotFoundException('تعویض روغن یافت نشد.')
+        const oilChange = await this.databaseService.oilChangeLog.findUnique({
+            where: { id: oilChangeId, carId }
+        });
+        if (!oilChange) throw new NotFoundException('تعویض روغن یافت نشد.');
 
         const {
             kilometer,
@@ -166,42 +165,40 @@ export class OilChangesService {
             ...rest
         } = updateOilChangeDto;
 
-        const oilChangeUpdated = await this.databaseService.$transaction(async (db) => {
-            if (kilometer) {
-                if (car.kilometer < kilometer) {
-                    await db.car.update({
-                        where: {
-                            id: carId
-                        },
-                        data: {
-                            kilometer
-                        }
-                    });
-                }
-            }
+        const baseData = { ...rest, kilometer };
+        const data =
+            oilChange.oilType === OilType.ENGINE
+                ? { ...baseData, oilFilterChanged, airFilterChanged, cabinFilterChanged, fuelFilterChanged }
+                : baseData;
 
-            const baseData = { ...rest, kilometer };
-            const data =
-                oilChange.oilType === OilType.ENGINE
-                    ? { ...baseData, oilFilterChanged, airFilterChanged, cabinFilterChanged, fuelFilterChanged }
-                    : baseData;
+        const needsCarUpdate = kilometer && kilometer > car.kilometer;
+        let oilChangeUpdated;
 
-            return await db.oilChangeLog.update({
-                where: {
-                    id: oilChangeId
-                },
-                data,
-                omit: {
-                    createdAt: true,
-                    updatedAt: true,
-                }
+        if (needsCarUpdate) {
+            oilChangeUpdated = await this.databaseService.$transaction(async (db) => {
+                await db.car.update({
+                    where: { id: carId },
+                    data: { kilometer }
+                });
+
+                return db.oilChangeLog.update({
+                    where: { id: oilChangeId },
+                    data,
+                    omit: { createdAt: true, updatedAt: true }
+                });
             });
-        });
+        } else {
+            oilChangeUpdated = await this.databaseService.oilChangeLog.update({
+                where: { id: oilChangeId },
+                data,
+                omit: { createdAt: true, updatedAt: true }
+            });
+        }
 
         return {
             message: 'تعویض روغن با موفقیت ویرایش شد.',
             data: oilChangeUpdated,
-        }
+        };
     }
 
     async deleteOilChange(
