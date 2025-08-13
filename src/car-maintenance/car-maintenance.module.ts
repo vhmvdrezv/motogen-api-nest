@@ -6,6 +6,8 @@ import { RefuelsController } from './controllers/refuels.controller';
 import { OilChangesController } from './controllers/oil-changes.controller';
 import { RepairsService } from './services/repairs.service';
 import { RepairsController } from './controllers/repairs.controller';
+import { PurchasesService } from './services/purchases.service';
+import { PurchasesController } from './controllers/purchases.controller';
 
 @Module({
     imports: [
@@ -15,11 +17,13 @@ import { RepairsController } from './controllers/repairs.controller';
         OilChangesController,
         RefuelsController,
         RepairsController,
+        PurchasesController,
     ],
     providers: [
         RefuelsService,
         OilChangesService,
         RepairsService,
+        PurchasesService,
     ]
 })
 export class CarMaintenanceModule { }

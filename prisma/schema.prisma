@@ -50,6 +50,7 @@ model Car {
   refuelLogs          RefuelLog[]
   oilChangeLogs       OilChangeLog[]
   repairLogs          RepairLog[]
+  purchaseLogs        PurchaseLog[]
 
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt  
@@ -107,6 +108,22 @@ model RepairLog{
 
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt  
+}
+
+model PurchaseLog {
+  id                  String        @id @default(cuid())
+  date                DateTime
+  part                String
+  purchaseCategory    PurchaseCategory
+  cost                Int
+  location            String
+  notes               String?
+
+  carId               String
+  car                 Car           @relation(fields: [carId], references: [id], onDelete: Cascade)
+
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt 
 }
 
 model CarBrand {
@@ -199,4 +216,10 @@ enum OilType {
 enum RepairAction {
   REPAIR
   REPLACE
+}
+
+enum PurchaseCategory {
+  BODY_AND_TRIM
+  CONSUMABLE
+  MECHANICAL
 }
