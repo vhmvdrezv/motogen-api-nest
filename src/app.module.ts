@@ -10,9 +10,11 @@ import { ColorsModule } from './colors/colors.module';
 import { UsersModule } from './users/users.module';
 import { UserCarsModule } from './user-cars/user-cars.module';
 import { CarMaintenanceModule } from './car-maintenance/car-maintenance.module';
+import { AiModule } from './ai/ai.module';
+import { AiChatModule } from './ai-chat/ai-chat.module';
 
 @Module({
-  imports: [CarsModule, DatabaseModule, AuthModule, CustomRedisModule, CacheManagerModule, ColorsModule, UsersModule, UserCarsModule, CarMaintenanceModule],
+  imports: [CarsModule, DatabaseModule, AuthModule, CustomRedisModule, CacheManagerModule, ColorsModule, UsersModule, UserCarsModule, CarMaintenanceModule, AiModule, AiChatModule],
   controllers: [],
   providers: [CacheManagerService],
 })
