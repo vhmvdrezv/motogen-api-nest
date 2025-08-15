@@ -22,7 +22,6 @@ model User {
   isProfileCompleted  Boolean       @default(false)   
   active              Boolean       @default(true)
   refreshToken        String?       @unique
-  refreshTokenExpires DateTime?
 
   cars                Car[]
   chatSessions        ChatSession[]
