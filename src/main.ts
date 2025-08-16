@@ -19,30 +19,29 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ResponseInterceptor()); // Now all responses are wrapped!
 
   // swagger
-  if (process.env.NODE_ENV !== 'production') {
-    const config = new DocumentBuilder()
-      .setTitle('Car Management API')
-      .addBearerAuth(
-        {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT',
-          name: 'JWT',
-          description: 'Enter JWT token',
-          in: 'header',
-        },
-        'JWT-auth',
-      )
-      .build();
 
-    const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api', app, document, {
-      swaggerOptions: {
-        persistAuthorization: true,
+  const config = new DocumentBuilder()
+    .setTitle('Car Management API')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
       },
-      customSiteTitle: 'Car Management API Documentation',
-    });
-  }
+      'JWT-auth',
+    )
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+    customSiteTitle: 'Car Management API Documentation',
+  });
 
   app.useGlobalFilters(new AllExceptionsFilter());
 
