@@ -1,0 +1,7 @@
+const client = createClient({
+    username: 'default',
+    password: '681rLYJbCN4M0WwjgPl3tBcuL5ZWSRWV',
+    socket: {
+        host: 'redis-12528.c8.us-east-1-2.ec2.redns.redis-cloud.com',
+        port: 12528
+    }
