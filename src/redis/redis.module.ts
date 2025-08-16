@@ -6,8 +6,10 @@ import { RedisModule } from '@nestjs-modules/ioredis'
         RedisModule.forRoot({
             type: 'single',
             options: {
-                path: process.env.REDIS_URL,
-            }
+                // ioredis accepts "url", but the Nest wrapper typing doesn’t list it
+                ...( { url: process.env.REDIS_URL } as any ),
+                tls: {}, // required because Upstash only supports TLS
+            },
         })
     ],
     exports: [RedisModule],
